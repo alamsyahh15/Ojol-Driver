@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".detailrequest.DetailRequest">
+
+
+    <LinearLayout
+            android:id="@+id/upbutton"
+            android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/detailTanggal"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:gravity="right"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:text="BSD,Serpong,Tanggerang "/>
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/titik2"
+                    android:layout_height="100dp"/>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="90dp">
+
+                <TextView
+                        android:id="@+id/detailAwal"
+                        android:layout_width="match_parent"
+                        android:lines="2"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="BSD,Serpong,Tanggerang "/>
+
+
+                <TextView
+                        android:id="@+id/detailTujuan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:layout_above="@+id/idd"
+                        android:lines="2"
+                        android:text="BSD,Serpong,Tanggerang "/>
+
+                <TextView
+                        android:id="@+id/detailPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="right"
+                        android:text="Rp.23.000.00"/>
+
+                <View
+                        android:id="@+id/idd"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@android:color/darker_gray"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+<fragment android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/mapsdetail"
+          android:layout_below="@+id/upbutton"
+          android:layout_above="@+id/detailbutton"
+          android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    <Button
+            android:id="@+id/detailbutton"
+            android:text="Take Booking"
+            android:textColor="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:layout_margin="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</RelativeLayout>
