@@ -1,17 +1,14 @@
 package com.udacoding.ojodriverlfirebasekotlin
 
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.media.RingtoneManager
-import android.net.Uri
 import android.support.v4.app.NotificationCompat
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.udacoding.ojodriverlfirebasekotlin.detailrequest.DetailRequest
+import com.udacoding.ojodriverlfirebasekotlin.utama.HomeActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -20,35 +17,38 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
 
-//
-//        Log.d("notif","hei :"+remoteMessage?.data?.get("message"))
-//        Log.d("notif","hei :"+remoteMessage?.data?.get("data"))
-//        //notification
-//        Log.d("notif","hei :"+remoteMessage?.data?.get("notification"))
-//        Log.d("notif","hei :"+remoteMessage?.from)
 
-       showNotification("")
+       showNotification()
 
     }
 
 
-    private fun showNotification(msg: String) {
-        val notificationBuilder = NotificationCompat.Builder(this)
-        val intent: Intent
-        intent = Intent(this, DetailRequest::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    private fun showNotification() {
 
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        notificationBuilder
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("hei")
-            .setContentText(msg)
-            .setAutoCancel(true)
-            .setLights(Color.BLUE, 1000, 1000)
-            .setSound(defaultSoundUri)
+        var status =0
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if(status == 0) {
 
-        notificationManager.notify(0, notificationBuilder.build())
+             status!! + 1
+
+            val notificationBuilder = NotificationCompat.Builder(this)
+            val intent: Intent
+            intent = Intent(this, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            notificationBuilder
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("New Order,yuk Ambil")
+                .setContentText("Silahkan check list")
+                .setAutoCancel(true)
+
+                .setSound(defaultSoundUri)
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.notify(0, notificationBuilder.build())
+
+        }
     }
 }
