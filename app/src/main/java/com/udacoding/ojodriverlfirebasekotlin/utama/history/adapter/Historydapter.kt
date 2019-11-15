@@ -1,6 +1,6 @@
 package com.udacoding.ojodriverlfirebasekotlin.utama.history.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.booking_item.view.*
 
 class Historydapter(
     private val mValues: List<Booking>
-) : RecyclerView.Adapter<Historydapter.ViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<Historydapter.ViewHolder>() {
 
 
 
@@ -36,7 +36,7 @@ class Historydapter(
 
     override fun getItemCount(): Int = mValues.size
 
-    inner class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class ViewHolder(mView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(mView) {
         var mAwal: TextView = mView.itemAwal
         val mTujuan: TextView = mView.itemTujuan
         val mTanggal : TextView = mView.itemTanggal

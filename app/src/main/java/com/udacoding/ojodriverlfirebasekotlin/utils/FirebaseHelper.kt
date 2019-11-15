@@ -48,7 +48,7 @@ object FirebaseHelper {
 
 
 
-        myRef.child(key).setValue(booking)
+        key?.let { myRef.child(it).setValue(booking) }
 
 
 
@@ -98,7 +98,7 @@ object FirebaseHelper {
         val myRef = database.getReference(Constan.tb_Uaser)
 
 
-        myRef.child(key).setValue(user)
+        key?.let { myRef.child(it).setValue(user) }
 
         return true
 

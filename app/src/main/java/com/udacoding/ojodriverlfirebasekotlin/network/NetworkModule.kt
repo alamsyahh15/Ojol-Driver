@@ -14,7 +14,11 @@ object NetworkModule {
     fun getOkhttp():OkHttpClient {
 
 
-        val log2 = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        val log2 =
+            httpLoggingInterceptor.apply {
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            }
         val client = OkHttpClient.Builder()
             .addInterceptor(log2).build()
 
@@ -39,7 +43,7 @@ object NetworkModule {
     fun getService(): ApiService {
 
 
-        var service: ApiService = getRetrofit().create(ApiService::class.java!!)
+        var service: ApiService = getRetrofit().create(ApiService::class.java)
 
         return service
 

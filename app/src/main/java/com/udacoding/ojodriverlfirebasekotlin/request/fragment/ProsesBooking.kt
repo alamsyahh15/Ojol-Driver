@@ -2,8 +2,8 @@ package com.udacoding.ojodriverlfirebasekotlin.request.fragment
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -101,7 +101,7 @@ class ProsesBooking : Fragment() {
                     startActivity<DetailRequest>(Constan.booking to item!!, Constan.status to 2)
                 }
             })
-            list.layoutManager = LinearLayoutManager(context)
+            list.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
         } catch (e: IllegalStateException) {
 

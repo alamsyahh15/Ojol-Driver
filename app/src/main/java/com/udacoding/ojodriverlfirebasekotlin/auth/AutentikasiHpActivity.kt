@@ -1,13 +1,13 @@
 package com.udacoding.ojodriverlfirebasekotlin.auth
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.database.FirebaseDatabase
 import com.udacoding.ojodriverlfirebasekotlin.R
 import com.udacoding.ojodriverlfirebasekotlin.utama.HomeActivity
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
 import kotlinx.android.synthetic.main.activity_autentikasi_hp.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 

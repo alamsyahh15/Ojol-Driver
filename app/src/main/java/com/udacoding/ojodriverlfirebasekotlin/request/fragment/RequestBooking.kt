@@ -1,9 +1,8 @@
 package com.udacoding.ojodriverlfirebasekotlin.request.fragment
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,8 @@ import com.udacoding.ojodriverlfirebasekotlin.request.fragment.adapter.BookingAd
 
 import com.udacoding.ojodriverlfirebasekotlin.utama.home.model.Booking
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
-import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import org.jetbrains.anko.support.v4.startActivity
-import java.lang.IllegalArgumentException
 
 /**
  * A fragment representing a list of Items.
@@ -115,7 +112,6 @@ class RequestBooking : Fragment() {
 
         }
     }
-
 
 
     override fun onDetach() {

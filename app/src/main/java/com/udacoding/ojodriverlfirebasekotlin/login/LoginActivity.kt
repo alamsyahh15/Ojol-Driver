@@ -1,7 +1,7 @@
 package com.udacoding.ojodriverlfirebasekotlin.login
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,7 +22,7 @@ import com.udacoding.ojodriverlfirebasekotlin.signup.Users
 import com.udacoding.ojodriverlfirebasekotlin.utama.HomeActivity
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -52,22 +52,20 @@ class LoginActivity : AppCompatActivity() {
 
                 authUserSignIn(loginUsername.text.toString(), loginPassword.text.toString())
 
-
             }
         }
     }
 
 
-    fun authUserSignIn(email: String, pas: String) {
+    private fun authUserSignIn(email: String, pas: String) {
 
-        auth = FirebaseAuth.getInstance()
+//        auth = FirebaseAuth.getInstance()
         var status: Boolean? = null
 
         auth?.signInWithEmailAndPassword(email, pas)?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
 
                 startActivity<HomeActivity>()
-
                 finish()
             } else {
 
@@ -94,17 +92,18 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, 4)
     }
 
-    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount?) {
 
 
-        val credential1 = GoogleAuthProvider.getCredential(acct.idToken, null)
+        val credential1 = GoogleAuthProvider.getCredential(acct?.idToken, null)
         auth?.signInWithCredential(credential1)
             ?.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
 
-                    checkDatabase(task.result.user.uid,acct)
+                    checkDatabase(task.result?.user?.uid,acct)
 
                 } else {
+
                 }
 
                 // ...
@@ -116,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun checkDatabase(uid: String, acct: GoogleSignInAccount) {
+    private fun checkDatabase(uid: String?, acct: GoogleSignInAccount?) {
 
 
         val database = FirebaseDatabase.getInstance()
@@ -124,12 +123,13 @@ class LoginActivity : AppCompatActivity() {
         val query =myRef.orderByChild("uid").equalTo(auth?.uid)
 
         query.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {
+
+            override fun onCancelled(p0: DatabaseError) {
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
 
-                val users = p0?.getValue(Users::class.java)
+                val users = p0.getValue(Users::class.java)
 
                 if(users?.uid != null){
 
@@ -148,17 +148,15 @@ class LoginActivity : AppCompatActivity() {
 
             }
         })
-
-
     }
 
 
-    fun insertUser(name: String, email: String, hp: String, uid: String): Boolean {
+    fun insertUser(name: String, email: String, hp: String, uid: String?): Boolean {
 
 
         val token = FirebaseInstanceId.getInstance().token
 
-        var user = Users()
+        val user = Users()
         user.email = email
         user.name = name
         user.hp = hp
@@ -167,14 +165,15 @@ class LoginActivity : AppCompatActivity() {
         user.longitude = "0.0"
         user.token = token
         val database = FirebaseDatabase.getInstance()
-        var key = database.reference.push().key
+        val key = database.reference.push().key
 
 
         val myRef = database.getReference(Constan.tb_Uaser)
 
 
 
-        myRef.child(key).setValue(user)
+        key?.let { myRef.child(it).setValue(user) }
+
         startActivity<AutentikasiHpActivity>(Constan.Key to key)
         return true
 

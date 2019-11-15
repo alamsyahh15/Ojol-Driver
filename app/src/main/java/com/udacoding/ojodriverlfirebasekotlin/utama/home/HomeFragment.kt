@@ -2,11 +2,12 @@ package com.udacoding.ojodriverlfirebasekotlin.utama.home
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,19 +18,22 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
-import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,6 +49,7 @@ import com.udacoding.ojodriverlfirebasekotlin.utils.GPSTracker
 import com.udacoding.ojodriverlfirebasekotlin.waiting.WaitingDriverActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -73,6 +78,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
 
+    @SuppressLint("WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
@@ -107,22 +113,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         // mapView?.getMapAsync(this);
     }
 
-    fun bookingHistoryUser(uid: String) {
+    fun bookingHistoryUser(uid: String?) {
 
         showDialog(true)
 
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference(Constan.tb_Booking)
 
-        val query = myRef.orderByChild(uid)
+        val query = uid?.let { myRef.orderByChild(it) }
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
+        query?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
 
-                val booking = p0?.getValue(Booking::class.java)
+                val booking = p0.getValue(Booking::class.java)
 
                 //status kalau sudah di take driver
 
@@ -202,7 +208,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
         bookingHistoryUser(key)
-        myRef.child(key).setValue(booking)
+        key?.let { myRef.child(it).setValue(booking) }
 
 
 
@@ -291,10 +297,18 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun takeLocation(status: Int) {
-
         try {
-            val intent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                .build(activity)
+            activity?.let { Places.initialize(it,"AIzaSyA4EnxH6dnS_YoMvKGfXBGO4ShYgqVNB3Y") }
+            val fields = Arrays.asList(
+                Place.Field.ID, Place.Field.NAME,
+                Place.Field.LAT_LNG, Place.Field.ADDRESS
+            )
+            val intent =
+                activity?.let {
+                    Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fields).build(
+                        it
+                    )
+                }
             startActivityForResult(intent, status)
         } catch (e: GooglePlayServicesRepairableException) {
             // TODO: Handle the error.
@@ -307,38 +321,38 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                val place = PlaceAutocomplete.getPlace(activity, data)
-                latAwal = place.latLng.latitude
-                lonAwal = place.latLng.longitude
+                val place = data?.let { Autocomplete.getPlaceFromIntent(it) }
+                latAwal = place?.latLng?.latitude
+                lonAwal = place?.latLng?.longitude
 
-                homeAwal.text = place.address.toString()
-                showMarker(latAwal ?: 0.0, lonAwal ?: 0.0, place.address.toString())
-                Log.i("locations", "Place: " + place.name)
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                val status = PlaceAutocomplete.getStatus(activity, data)
+                homeAwal.text = place?.address.toString()
+                showMarker(latAwal ?: 0.0, lonAwal ?: 0.0, place?.address.toString())
+                Log.i("locations", "Place: " + place?.name)
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                val status = data?.let { Autocomplete.getStatusFromIntent(it) }
                 // TODO: Handle the error.
-                Log.i("locatios", status.statusMessage)
+                Log.i("locatios", status?.statusMessage)
 
             } else if (resultCode == RESULT_CANCELED) {
             }
         } else {
 
             if (resultCode == RESULT_OK) {
-                val place = PlaceAutocomplete.getPlace(activity, data)
+                val place = data?.let { Autocomplete.getPlaceFromIntent(it) }
 
-                latAkhir = place.latLng.latitude
-                lonAkhir = place.latLng.longitude
+                latAkhir = place?.latLng?.latitude
+                lonAkhir = place?.latLng?.longitude
 
-                showMarker(latAkhir ?: 0.0, lonAkhir ?: 0.0, place.address.toString())
+                showMarker(latAkhir ?: 0.0, lonAkhir ?: 0.0, place?.address.toString())
 
-                homeTujuan.text = place.address.toString()
+                homeTujuan.text = place?.address.toString()
 
                 route()
-                Log.i("locations", "Place: " + place.name)
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                val status = PlaceAutocomplete.getStatus(activity, data)
+                Log.i("locations", "Place: " + place?.name)
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                val status = data?.let { Autocomplete.getStatusFromIntent(it) }
                 // TODO: Handle the error.
-                Log.i("locatios", status.statusCode.toString())
+                Log.i("locatios", status?.statusCode.toString())
 
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -437,7 +451,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(p0: GoogleMap?) {
-        map = p0;
+        map = p0
         map?.getUiSettings()?.setMyLocationButtonEnabled(false)
         //  map?.setMyLocationEnabled(true)
         map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(-6.3088652, 106.682188), 12f))

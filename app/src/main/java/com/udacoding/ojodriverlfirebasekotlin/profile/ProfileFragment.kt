@@ -2,7 +2,7 @@ package com.udacoding.ojodriverlfirebasekotlin.profile
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ import com.udacoding.ojodriverlfirebasekotlin.login.LoginActivity
 import com.udacoding.ojodriverlfirebasekotlin.signup.Users
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 
 
@@ -44,27 +44,23 @@ class ProfileFragment : Fragment() {
 
         val query = myRef.orderByChild("uid").equalTo(auth?.uid)
         query.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
 
-                if(p0 != null) {
-                    for (issue in p0.children) {
+                for (issue in p0.children) {
 
-                        val user = Users()
+//                    val user = Users()
 
-                        val data = issue?.getValue(Users::class.java)
-                        user.longitude = data?.longitude
-                        user.latitude = data?.latitude
-                        user.name = data?.name
-                        user.hp = data?.hp
-                        user.email = data?.email
+                    val data = issue?.getValue(Users::class.java)
+//                    user.longitude = data?.longitude
+//                    user.latitude = data?.latitude
+//                    user.name = data?.name
+//                    user.hp = data?.hp
+//                    user.email = data?.email
 
-
-                        showProfile(user)
-
-                    }
+                    showProfile(data)
 
                 }
             }
@@ -83,6 +79,7 @@ class ProfileFragment : Fragment() {
         profileSignout.onClick {
 
             auth?.signOut()
+
 
             startActivity<LoginActivity>()
 

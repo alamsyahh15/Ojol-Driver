@@ -5,7 +5,7 @@
                 android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
                 tools:context=".request.RequestFragment">
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation2"
            android:background="@color/colorPrimary"
             app:itemTextColor="@android:color/white"

@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.os.IBinder;
 import android.content.Intent;
 import android.Manifest;
@@ -31,7 +31,6 @@ import com.google.android.gms.location.LocationRequest
  * Created by nandoseptianhusni on 21/08/18.
  */
 class TrackingService : Service() {
-
 
 
     private var mAuth: FirebaseAuth? = null
@@ -66,20 +65,21 @@ class TrackingService : Service() {
         val ref = FirebaseDatabase.getInstance().getReference(Constan.tb_Uaser)
 
         val query = ref.orderByChild("uid").equalTo(mAuth?.currentUser?.uid)
-        query.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
-                for(issue in p0?.children!!){
-                   val key = issue.key
+            override fun onDataChange(p0: DataSnapshot) {
+                for (issue in p0.children) {
+                    val key = issue.key
 
                     val request = LocationRequest()
                     request.interval = 1000
                     request.fastestInterval = 1000
                     request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    val client = LocationServices.getFusedLocationProviderClient(this@TrackingService)
+                    val client =
+                        LocationServices.getFusedLocationProviderClient(this@TrackingService)
                     val permission = ContextCompat.checkSelfPermission(
                         this@TrackingService,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -90,9 +90,14 @@ class TrackingService : Service() {
                             override fun onLocationResult(locationResult: LocationResult?) {
                                 val location = locationResult?.lastLocation
                                 if (location != null) {
-                                    ref.child(key).child("latitude").setValue(location.latitude.toString())
-                                    ref.child(key).child("longitude").setValue(location.longitude.toString())
-
+                                    key?.let {
+                                        ref.child(it).child("latitude")
+                                            .setValue(location.latitude.toString())
+                                    }
+                                    key?.let {
+                                        ref.child(it).child("longitude")
+                                            .setValue(location.longitude.toString())
+                                    }
 
                                 }
                             }
@@ -104,10 +109,8 @@ class TrackingService : Service() {
             }
         })
 
-
-
     }
-
+}
 
 //    private fun requestLocationUpdates() {
 //        val request = LocationRequest()
@@ -157,4 +160,4 @@ class TrackingService : Service() {
 //
 //
 //    }
-}
+//}

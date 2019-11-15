@@ -1,6 +1,8 @@
 package com.udacoding.ojodriverlfirebasekotlin.detailrequest
 
-import android.support.v7.app.AppCompatActivity
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,7 +19,7 @@ import com.udacoding.ojodriverlfirebasekotlin.utama.HomeActivity
 import com.udacoding.ojodriverlfirebasekotlin.utama.home.model.Booking
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
 import kotlinx.android.synthetic.main.activity_detail_request.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.startActivity
 
 
@@ -62,16 +64,14 @@ class DetailRequest : AppCompatActivity(), OnMapReadyCallback {
 
         val query = myRef.orderByChild("tanggal").equalTo(booking?.tanggal)
         query.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot?) {
-
-                for(issu in p0?.children!!)
-
-                key = issu.key
+            override fun onCancelled(p0: DatabaseError) {
             }
 
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onDataChange(p0: DataSnapshot) {
+                for (issu in p0.children){
+                    key = issu.key.toString()
+                }
             }
-
         })
 
         detailbutton.onClick {
@@ -92,40 +92,35 @@ class DetailRequest : AppCompatActivity(), OnMapReadyCallback {
 
 
             }
-
-
-
-
         }
-
-
     }
 
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        val latlng = booking?.latAwal?.toDouble()?.let { booking?.lonAwal?.toDouble()?.let { it1 -> LatLng(it, it1) } }
-        val latlng1 = booking?.latTujuan?.toDouble()?.let { booking?.lonTujuan?.toDouble()?.let { it1 -> LatLng(it, it1) } }
+        val latlng = booking?.latAwal?.let { booking?.lonAwal?.let { it1 -> LatLng(it, it1) } }
+        val latlng1 = booking?.latTujuan?.let { booking?.lonTujuan?.let { it1 -> LatLng(it, it1) } }
 
-        mMap.addMarker(latlng?.let { MarkerOptions().position(it).title("Awal").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)) })
-        mMap.addMarker(latlng1?.let { MarkerOptions().position(it).title("tujuan").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)) })
+        val res = this.resources
+        val marker1 =  BitmapFactory.decodeResource(res, R.mipmap.ic_pin)
+        val smallmarker = Bitmap.createScaledBitmap(marker1,80,120,false)
 
-        var builder = LatLngBounds.builder()
+
+        mMap.addMarker(latlng?.let { MarkerOptions().position(it).title("Awal").icon(BitmapDescriptorFactory.fromBitmap(smallmarker)) })
+        mMap.addMarker(latlng1?.let { MarkerOptions().position(it).title("tujuan").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)) })
+
+        val builder = LatLngBounds.builder()
         builder.include(latlng)
         builder.include(latlng1)
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),12))
-
-        mMap.setOnCameraChangeListener(GoogleMap.OnCameraChangeListener {
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),12))
+        mMap.setOnCameraIdleListener {
             mMap.moveCamera(
-                CameraUpdateFactory.newLatLngBounds(
-                    builder.build(),
-                    17
-                )
+                CameraUpdateFactory.newLatLngBounds(builder.build(),32)
             )
-        })
+        }
 
 
         // Add a marker in Sydney and move the camera
     }
-    }
+}

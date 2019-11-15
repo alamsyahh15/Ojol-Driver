@@ -1,70 +1,45 @@
 {
   "project_info": {
-    "project_number": "459850711075",
-    "firebase_url": "https://ojekonlinefirebase.firebaseio.com",
-    "project_id": "ojekonlinefirebase",
-    "storage_bucket": "ojekonlinefirebase.appspot.com"
+    "project_number": "621341742475",
+    "firebase_url": "https://ojek-online-ku-642b2.firebaseio.com",
+    "project_id": "ojek-online-ku-642b2",
+    "storage_bucket": "ojek-online-ku-642b2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:459850711075:android:9849dce920c10d75",
+        "mobilesdk_app_id": "1:621341742475:android:ad7003dfa7277ed9b2cb8e",
         "android_client_info": {
           "package_name": "com.udacoding.ojodriverlfirebasekotlin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "459850711075-0uu8vo54e8i7n7rb9qtnvch2gbopmuue.apps.googleusercontent.com",
+          "client_id": "621341742475-8sl5r280a2p4458rf6atrlunq791o1h0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacoding.ojodriverlfirebasekotlin",
+            "certificate_hash": "e5348ea9585b4417dcec65a21a90dc4aed779914"
+          }
+        },
+        {
+          "client_id": "621341742475-hovlfjj45j97am1hfs7esqvsigpui0fs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJNSOUGpyVfhoqH-rKZ8wlKeiOxO_RINs"
+          "current_key": "AIzaSyCRqWvhI3bF9gISBFH5ehdtzq8RMkugKTw"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:459850711075:android:f8d7fe1ea5ed50a8",
-        "android_client_info": {
-          "package_name": "com.udacoding.ojolfirebasekotlin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "459850711075-0uu8vo54e8i7n7rb9qtnvch2gbopmuue.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAJNSOUGpyVfhoqH-rKZ8wlKeiOxO_RINs"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621341742475-hovlfjj45j97am1hfs7esqvsigpui0fs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

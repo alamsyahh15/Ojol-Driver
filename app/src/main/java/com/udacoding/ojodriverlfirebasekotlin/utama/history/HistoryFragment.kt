@@ -2,8 +2,8 @@ package com.udacoding.ojodriverlfirebasekotlin.utama.history
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,12 +95,9 @@ class HistoryFragment : Fragment() {
         if (data != null) {
 
             recyclerview.adapter = Historydapter(data)
-            recyclerview.layoutManager = LinearLayoutManager(context)
-
+            recyclerview.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         }
 
-
     }
-
 
 }

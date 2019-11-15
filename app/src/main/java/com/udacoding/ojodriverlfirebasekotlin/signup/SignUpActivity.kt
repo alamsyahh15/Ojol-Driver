@@ -1,16 +1,17 @@
 package com.udacoding.ojodriverlfirebasekotlin.signup
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.udacoding.ojodriverlfirebasekotlin.login.LoginActivity
 import com.udacoding.ojodriverlfirebasekotlin.R
+import com.udacoding.ojodriverlfirebasekotlin.auth.AutentikasiHpActivity
 import com.udacoding.ojodriverlfirebasekotlin.utils.Constan
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.startActivity
 
 class SignUpActivity : AppCompatActivity() {
@@ -31,16 +32,9 @@ class SignUpActivity : AppCompatActivity() {
                 signUpName.text.isNotEmpty() &&
                 signUpPassword.text.isNotEmpty() &&
                 signUpPasswordConfirm.text.isNotEmpty()
-            ) {
-
-
-               autUserSignUp(signUpEmail.text.toString(), signUpPassword.text.toString())
-
-
-
-                }
-
-
+            ){
+                autUserSignUp(signUpEmail.text.toString(), signUpPassword.text.toString())
+            }
         }
 
     }
@@ -54,9 +48,12 @@ class SignUpActivity : AppCompatActivity() {
 
             if (task.isSuccessful) {
 
-                if(insertUser(signUpName.text.toString(),
+                if(insertUser(
+                        signUpName.text.toString(),
                         signUpEmail.text.toString(),
-                        signUpHp.text.toString(),task.result.user.uid)!!
+                        signUpHp.text.toString(),
+                        task.result?.user?.uid
+                    )
                 ){
 
                     startActivity<LoginActivity>()
@@ -65,11 +62,10 @@ class SignUpActivity : AppCompatActivity() {
                 status = true
 
             } else {
-
                 status = false
+                println("Gagal Add To Database")
 
             }
-
 
         }
 
@@ -78,11 +74,11 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    fun insertUser(name: String, email: String, hp: String, uid: String): Boolean {
+    fun insertUser(name: String, email: String, hp: String, uid: String?): Boolean {
 
-        val token = FirebaseInstanceId.getInstance().token
+        val token1 = FirebaseInstanceId.getInstance()
 
-        var user = Users()
+        val user = Users()
         user.uid = uid
         user.name = name
         user.email = email
@@ -90,20 +86,12 @@ class SignUpActivity : AppCompatActivity() {
         user.active = true
         user.latitude = "0.0"
         user.longitude = "0.0"
-        user.token = token
+        user.token = token1.token
         val database = FirebaseDatabase.getInstance()
-        var key = database.reference.push().key
+        val key = database.reference.push().key
         val myRef = database.getReference(Constan.tb_Uaser)
-
-
-        myRef.child(key).setValue(user)
-
+        myRef.child(key ?: "").setValue(user)
+        startActivity<AutentikasiHpActivity>()
         return true
-
     }
-
-
-
-
-
 }

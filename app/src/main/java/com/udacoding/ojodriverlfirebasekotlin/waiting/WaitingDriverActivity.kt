@@ -1,6 +1,6 @@
 package com.udacoding.ojodriverlfirebasekotlin.waiting
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.udacoding.ojodriverlfirebasekotlin.R
 
